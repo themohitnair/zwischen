@@ -5,4 +5,3 @@ class LocationData(BaseModel):
     country: str
     latitude: str
     longitude: str
-    isp: str

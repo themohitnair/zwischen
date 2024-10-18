@@ -2,7 +2,10 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 import logging
 import os
+from datetime import datetime
 from database import init_db, yield_session
+from utils import retrieve_geoloc
+from models import LocationData
 
 class ZwischenMiddleware(BaseHTTPMiddleware):
     def __init__(self, app):
@@ -17,7 +20,7 @@ class ZwischenMiddleware(BaseHTTPMiddleware):
         end_time = datetime.utcnow()
         processing_time = (end_time - start_time).total_seconds()
 
-        ip = request.client.host
+        ip =  "103.92.100.152" # request.client.host
         method = request.method
         url = str(request.url)
         status_code = response.status_code
@@ -25,11 +28,12 @@ class ZwischenMiddleware(BaseHTTPMiddleware):
         browser = request.headers.get("user-agent", "")
         referer = request.headers.get("referer", "")
 
-        city = "Unknown" 
-        country = "Unknown"
-        latitude = 0.0
-        longitude = 0.0
-        isp = "Unknown"
+        locdata: LocationData = await retrieve_geoloc(ip)
+
+        city = locdata.city
+        country = locdata.country
+        latitude = locdata.latitude
+        longitude = locdata.longitude
 
         log_entry = Log(
             timestamp=timestamp,
@@ -39,13 +43,14 @@ class ZwischenMiddleware(BaseHTTPMiddleware):
             country=country,
             latitude=latitude,
             longitude=longitude,
-            isp=isp,
             url=url,
             status_code=status_code,
             browser=browser,
             referer=referer,
             processing_time=processing_time
         )
+
+        logging.info(f"IP - {ip}")
 
         async with yield_session() as session:
             session.add(log_entry)
