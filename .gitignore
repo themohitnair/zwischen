@@ -1,0 +1,6 @@
+.venv
+__pycache__
+GeoIP.conf
+.env
+GeoLite2-City.mmdb
+.geoipupdate.lock
