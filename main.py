@@ -1,6 +1,9 @@
 import log_config
 import logging
 
+import asyncio
+from fastapi.responses import JSONResponse
+
 from fastapi import FastAPI
 from middleware import ZwischenMiddleware
 from database import init_zwischen_db
@@ -19,6 +22,10 @@ async def greet():
     return {
         "message": "hello from zwischen"
     }
+
+@app.get("/metrics")
+async def expose_metrics():
+    ...
 
 if __name__ == "__main__":
     import uvicorn

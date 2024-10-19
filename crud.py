@@ -1,5 +1,7 @@
 import aiosqlite
 import logging
+import pandas as pd
+from urllib.parse import urlparse
 
 logger = logging.getLogger(__name__)
 
@@ -12,13 +14,17 @@ async def insert_log(ip: str, method: str, url: str, status_code: str, timestamp
         try:
             if validate_ip(ip):
                 locdata: LocationData = await retrieve_geoloc(ip)
+
+                parsed_url = urlparse(url)
+                endpoint = parsed_url.path
+
                 query = """
                 INSERT INTO Log (ip, country, city, latitude, longitude, method, url, status_code, timestamp, browser, referrer)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """
                 values = (
                     ip, locdata.country, locdata.city, locdata.latitude, locdata.longitude,
-                    method, url, status_code, timestamp, browser, referrer
+                    method, endpoint, status_code, timestamp, browser, referrer
                 )
                 logger.info(f"Retrieved information from Maxmind for {ip}")
                 await db.execute(query, values)
