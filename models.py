@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 class LocationData(BaseModel):
-    city: str
-    country: str
-    latitude: str
-    longitude: str
+    city: str = "Unknown"
+    country: str = "Unknown"
+    latitude: float = 0.0
+    longitude: float = 0.0

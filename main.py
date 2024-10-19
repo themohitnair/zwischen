@@ -1,7 +1,14 @@
 from fastapi import FastAPI
 from middleware import ZwischenMiddleware
+from database import init_zwischen_db
+from contextlib import asynccontextmanager
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await init_zwischen_db()
+    yield
+
+app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(ZwischenMiddleware)
 
@@ -10,6 +17,7 @@ async def greet():
     return {
         "message": "hello from zwischen"
     }
+
 
 if __name__ == "__main__":
     import uvicorn

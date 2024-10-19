@@ -1,4 +1,6 @@
-from sqlmodel import create_engine, Session, SQLModel, Field
+from sqlmodel import SQLModel, Field
+from sqlalchemy.ext.asyncio import AsyncSession, AsyncEngine, create_async_engine
+from contextlib import asynccontextmanager
 
 class Log(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
@@ -13,23 +15,23 @@ class Log(SQLModel, table=True):
     status_code: int
     browser: str
     referrer: str 
-    processing_time: float 
 
 DATABASE_FILE = "logs.db"
-DATABASE_URL = f"sqlite:///{DATABASE_FILE}"
+DATABASE_URL = f"sqlite+aiosqlite:///{DATABASE_FILE}"
 
-engine = create_engine(
+async_engine: AsyncEngine = create_async_engine(
     url=DATABASE_URL,
-    connect_args= {
-        "check_same_thread": False
-    },
-    pool_size=60,
-    max_overflow=10
+    connect_args={"check_same_thread": False},
 )
 
-def init_db():
-    SQLModel.metadata.create_all(engine)
+async def init_zwischen_db() -> None:
+    async with async_engine.begin() as conn:
+        await conn.run_sync(SQLModel.metadata.create_all)
 
-def yield_session():
-    with Session(engine) as session:
-        yield session
+@asynccontextmanager
+async def yield_session() -> AsyncSession:
+    async with AsyncSession(async_engine) as session:
+        try:
+            yield session
+        finally:
+            await session.close()
