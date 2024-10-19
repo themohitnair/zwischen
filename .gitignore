@@ -2,6 +2,7 @@
 __pycache__
 GeoIP.conf
 .env
-GeoLite2-City.mmdb
+*.mmdb
 .geoipupdate.lock
 *.db
+*.log

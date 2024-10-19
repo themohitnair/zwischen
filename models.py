@@ -7,7 +7,6 @@ class LocationData(BaseModel):
     longitude: float = 0.0
 
 class Log(BaseModel):
-    id: int = Field(default=None, primary_key=True)
     timestamp: str
     method: str
     ip: str    

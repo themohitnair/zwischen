@@ -1,7 +1,10 @@
 import aiosqlite
 from contextlib import asynccontextmanager
+import logging
 
-DATABASE_FILE = "logs.db"
+logger = logging.getLogger(__name__)
+
+DATABASE_FILE = "zwischen.db"
 
 async def init_zwischen_db() -> None:
     async with aiosqlite.connect(DATABASE_FILE) as db:
@@ -22,6 +25,7 @@ async def init_zwischen_db() -> None:
         )
         """)
         await db.commit()
+        logger.info("SQLite Database created")
 
 @asynccontextmanager
 async def yield_conn():
