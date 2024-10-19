@@ -1,31 +1,23 @@
-from sqlmodel import select
-from sqlalchemy.ext.asyncio import AsyncSession
-from database import yield_session, Log
+import aiosqlite
+from database import yield_session
 from utils import validate_ip, retrieve_geoloc
-from fastapi import Depends
 from models import LocationData
 
 async def insert_log(ip: str, method: str, url: str, status_code: str, timestamp: str, browser: str, referrer: str):
-    async with yield_session() as session:
+    async with yield_db() as db:
         if validate_ip(ip):
             locdata: LocationData = await retrieve_geoloc(ip)
 
-            log_entry: Log = Log(
-                ip=ip,
-                country=locdata.country,
-                city=locdata.city,
-                latitude=locdata.latitude,
-                longitude=locdata.longitude,
-                method=method,
-                url=url,
-                status_code=status_code,
-                timestamp=timestamp,
-                browser=browser,
-                referrer=referrer,
+            query = """
+            INSERT INTO Log (ip, country, city, latitude, longitude, method, url, status_code, timestamp, browser, referrer)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """
+            values = (
+                ip, locdata.country, locdata.city, locdata.latitude, locdata.longitude,
+                method, url, status_code, timestamp, browser, referrer
             )
 
-            session.add(log_entry)
-            await session.commit()
-            await session.refresh(log_entry)
+            await db.execute(query, values)
+            await db.commit()
 
-            return log_entry
+            return {"ip": ip, "country": locdata.country, "city": locdata.city}
