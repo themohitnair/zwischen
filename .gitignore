@@ -5,4 +5,5 @@ GeoIP.conf
 *.mmdb
 .geoipupdate.lock
 *.db
+*.db-journal
 *.log
