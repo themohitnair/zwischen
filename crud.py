@@ -19,10 +19,10 @@ async def insert_log(ip: str, method: str, endpoint: str, status_code: str, time
                 query = """
                 INSERT INTO Log 
                 (ip, country, city, latitude, longitude, method, endpoint, 
-                status_code, timestamp, os, browser, referrer) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                        """
-                values = (ip, locdata.country, locdata.city, locdata.latitude, locdata.longitude, method, endpoint, status_code, timestamp, browser, referrer)
+                status_code, timestamp, browser, os, device, referrer) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """
+                values = (ip, locdata.country, locdata.city, locdata.latitude, locdata.longitude, method, endpoint, status_code, timestamp, browser, os, device, referrer)
                 
                 await db.execute(query, values)
                 await db.commit()
