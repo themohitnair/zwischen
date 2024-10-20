@@ -14,7 +14,7 @@ class Log(BaseModel):
     country: str
     latitude: float
     longitude: float
-    url: str 
+    endpoint: str 
     status_code: int
     browser: str
     referrer: str
