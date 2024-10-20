@@ -8,6 +8,7 @@ from fastapi import FastAPI
 from middleware import ZwischenMiddleware
 from database import init_zwischen_db
 from contextlib import asynccontextmanager
+from fastapi.middleware.cors import CORSMiddleware
 
 from crud import (
     number_of_requests,
@@ -23,6 +24,15 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+
 app.add_middleware(ZwischenMiddleware)
 
 @app.get("/")
