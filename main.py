@@ -9,6 +9,14 @@ from middleware import ZwischenMiddleware
 from database import init_zwischen_db
 from contextlib import asynccontextmanager
 
+from crud import (
+    number_of_requests,
+    requests_by_country,
+    requests_by_city,
+    requests_by_method,
+    requests_by_status_code
+)
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await init_zwischen_db()
@@ -20,12 +28,25 @@ app.add_middleware(ZwischenMiddleware)
 @app.get("/")
 async def greet():
     return {
-        "message": "hello from zwischen"
+        "message": "root endpoint"
+    }
+
+@app.get("/something")
+async def greet():
+    return {
+        "message": "some other endpoint"
     }
 
 @app.get("/metrics")
-async def expose_metrics():
-    ...
+async def get_metrics():
+    metrics = {
+        "total_requests": await number_of_requests(),
+        "requests_by_country": await requests_by_country(),
+        "requests_by_city": await requests_by_city(),
+        "requests_by_method": await requests_by_method(),
+        "requests_by_status_code": await requests_by_status_code()
+    }
+    return JSONResponse(content=metrics)
 
 if __name__ == "__main__":
     import uvicorn

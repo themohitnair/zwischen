@@ -18,9 +18,11 @@ async def init_zwischen_db() -> None:
             country TEXT,
             latitude REAL,
             longitude REAL,
-            url TEXT,
+            endpoint TEXT,
             status_code INTEGER,
             browser TEXT,
+            os TEXT, 
+            device TEXT,
             referrer TEXT
         )
         """)
