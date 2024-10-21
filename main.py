@@ -31,6 +31,8 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 app.mount("/assets", StaticFiles(directory=Path("metrics/dist/assets")), name="assets")
+app.mount("/favicon", StaticFiles(directory=Path("metrics/dist/favicon")), name="favicon")
+
 
 app.add_middleware(ZwischenMiddleware)
 

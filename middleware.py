@@ -16,9 +16,14 @@ class ZwischenMiddleware(BaseHTTPMiddleware):
         logger.info("MaxMind GeoIP database initialized.")
 
     async def dispatch(self, request: Request, call_next):
-        exempt_paths = ["/metrics/"]
+        path = request.url.path.rstrip("/")
 
-        if request.url.path in exempt_paths:
+        logger.info(f"Request path: {path}")
+
+        exempt_paths = ["/metrics", "/assets"]
+
+        if any(path.startswith(exempt) for exempt in exempt_paths):
+            logger.info(f"Bypassing middleware for exempted path: {path}")
             return await call_next(request)
 
         start_time = datetime.utcnow()
