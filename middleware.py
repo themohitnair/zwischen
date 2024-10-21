@@ -4,6 +4,7 @@ from starlette.requests import Request
 from datetime import datetime
 from user_agents import parse
 from crud import insert_log
+from database import yield_conn, init_zwischen_db, create_serial_sequence
 from utils import init_maxmind_geoipdb
 
 logger = logging.getLogger(__name__)
@@ -11,9 +12,13 @@ logger = logging.getLogger(__name__)
 class ZwischenMiddleware(BaseHTTPMiddleware):
     def __init__(self, app):
         super().__init__(app)
-        logger.info("Initiating MaxMind GeoIP City database update.")
-        init_maxmind_geoipdb()
-        logger.info("MaxMind GeoIP database initialized.")
+        # logger.info("Initiating MaxMind GeoIP City database update.")
+        # init_maxmind_geoipdb()
+        # logger.info("MaxMind GeoIP database initialized.")
+        create_serial_sequence(yield_conn())
+        logger.info("Serial Sequence Created.")
+        init_zwischen_db()
+        logger.info("DuckDB Database Initialized.")
 
     async def dispatch(self, request: Request, call_next):
         path = request.url.path.rstrip("/")
@@ -46,6 +51,8 @@ class ZwischenMiddleware(BaseHTTPMiddleware):
 
         referrer = request.headers.get('referer', 'unknown')
         timestamp = start_time.strftime("%Y-%m-%d %H:%M:%S")
+
+        db = yield_conn()
         
-        await insert_log(ip, method, endpoint, status_code, timestamp, browser, os, device, referrer)
+        await insert_log(ip, method, endpoint, status_code, timestamp, browser, os, device, referrer, db)
         return response

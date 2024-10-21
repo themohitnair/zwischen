@@ -4,6 +4,7 @@ GeoIP.conf
 .env
 *.mmdb
 .geoipupdate.lock
-*.db
-*.db-journal
+*.duckdb
 *.log
+*.open
+*.duckdb.wal

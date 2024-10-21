@@ -9,25 +9,8 @@ from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 
 from middleware import ZwischenMiddleware
-from database import init_zwischen_db
 
-from crud import (
-    number_of_requests,
-    requests_by_country,
-    requests_by_city,
-    requests_by_method,
-    requests_by_endpoint,
-    requests_by_os,
-    requests_by_browser,
-    requests_by_status_code
-)
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    await init_zwischen_db()
-    yield
-
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 
 app.add_middleware(ZwischenMiddleware)
 
@@ -45,17 +28,7 @@ async def greet():
 
 @app.get("/metrics")
 async def get_metrics():    
-    metrics = {
-        "total_requests": await number_of_requests(),
-        "requests_by_country": await requests_by_country(),
-        "requests_by_city": await requests_by_city(),
-        "requests_by_method": await requests_by_method(),
-        "requests_by_endpoint": await requests_by_endpoint(),
-        "requests_by_status_code": await requests_by_status_code(),
-        "requests_by_browser": await requests_by_browser(),
-        "requests_by_os": await requests_by_os(),
-    }
-    return JSONResponse(content=metrics)
+    ...
 
 if __name__ == "__main__":
     import uvicorn
