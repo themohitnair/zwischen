@@ -20,7 +20,7 @@ class ZwischenMiddleware(BaseHTTPMiddleware):
 
         logger.info(f"Request path: {path}")
 
-        exempt_paths = ["/metrics", "/assets"]
+        exempt_paths = ["/metrics", "/dashboard"]
 
         if any(path.startswith(exempt) for exempt in exempt_paths):
             logger.info(f"Bypassing middleware for exempted path: {path}")

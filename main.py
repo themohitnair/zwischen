@@ -3,9 +3,8 @@ import log_config
 import logging
 from pathlib import Path
 import asyncio
-from fastapi.responses import JSONResponse, HTMLResponse, FileResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -30,19 +29,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-app.mount("/assets", StaticFiles(directory=Path("metrics/dist/assets")), name="assets")
-app.mount("/favicon", StaticFiles(directory=Path("metrics/dist/favicon")), name="favicon")
-
-
 app.add_middleware(ZwischenMiddleware)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 @app.get("/")
 async def greet():
@@ -57,7 +44,7 @@ async def greet():
     }
 
 @app.get("/metrics")
-async def get_metrics(request: Request):    
+async def get_metrics():    
     metrics = {
         "total_requests": await number_of_requests(),
         "requests_by_country": await requests_by_country(),
