@@ -57,10 +57,7 @@ async def greet():
     }
 
 @app.get("/metrics")
-async def get_metrics(request: Request):
-    if "text/html" in request.headers.get("accept", ""):
-        return FileResponse(Path("metrics/dist/index.html"))
-    
+async def get_metrics(request: Request):    
     metrics = {
         "total_requests": await number_of_requests(),
         "requests_by_country": await requests_by_country(),
