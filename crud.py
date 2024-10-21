@@ -139,7 +139,7 @@ async def requests_by_method() -> List[Dict]:
             await db.rollback()
             return {"error": str(e)}
 
-async def requests_by_city() -> List[Dict]:
+async def requests_by_endpoint() -> List[Dict]:
     async with yield_conn() as db:
         try:
             query = """ 
@@ -172,7 +172,51 @@ async def requests_by_status_code() -> List[Dict]:
             """
             cursor: aiosqlite.Cursor = await db.execute(query)
             result = await cursor.fetchall()
-            df = pd.DataFrame(result, columns=['status', 'request_count'])
+            df = pd.DataFrame(result, columns=['status_code', 'request_count'])
+            return df.to_dict(orient="records")
+        except aiosqlite.Error as e:
+            logger.error(f"Database Error: {e}")
+            await db.rollback()
+            return {"error": str(e)}
+        except Exception as e:
+            logger.error(f"Unexpected Error: {e}")
+            await db.rollback()
+            return {"error": str(e)}
+
+async def requests_by_browser():
+    async with yield_conn() as db:
+        try:
+            query = """ 
+            SELECT browser, COUNT(*) as request_count
+            FROM Log
+            GROUP BY browser
+            ORDER BY request_count DESC
+            """
+            cursor: aiosqlite.Cursor = await db.execute(query)
+            result = await cursor.fetchall()
+            df = pd.DataFrame(result, columns=['browser', 'request_count'])
+            return df.to_dict(orient="records")
+        except aiosqlite.Error as e:
+            logger.error(f"Database Error: {e}")
+            await db.rollback()
+            return {"error": str(e)}
+        except Exception as e:
+            logger.error(f"Unexpected Error: {e}")
+            await db.rollback()
+            return {"error": str(e)}
+
+async def requests_by_os():
+    async with yield_conn() as db:
+        try:
+            query = """ 
+            SELECT os, COUNT(*) as request_count
+            FROM Log
+            GROUP BY os
+            ORDER BY request_count DESC
+            """
+            cursor: aiosqlite.Cursor = await db.execute(query)
+            result = await cursor.fetchall()
+            df = pd.DataFrame(result, columns=['os', 'request_count'])
             return df.to_dict(orient="records")
         except aiosqlite.Error as e:
             logger.error(f"Database Error: {e}")

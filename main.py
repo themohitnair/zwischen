@@ -15,6 +15,9 @@ from crud import (
     requests_by_country,
     requests_by_city,
     requests_by_method,
+    requests_by_endpoint,
+    requests_by_os,
+    requests_by_browser,
     requests_by_status_code
 )
 
@@ -54,7 +57,10 @@ async def get_metrics():
         "requests_by_country": await requests_by_country(),
         "requests_by_city": await requests_by_city(),
         "requests_by_method": await requests_by_method(),
-        "requests_by_status_code": await requests_by_status_code()
+        "requests_by_endpoint": await requests_by_endpoint(),
+        "requests_by_status_code": await requests_by_status_code(),
+        "requests_by_browser": await requests_by_browser(),
+        "requests_by_os": await requests_by_os(),
     }
     return JSONResponse(content=metrics)
 
