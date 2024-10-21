@@ -1,14 +1,16 @@
 import log_config
+
 import logging
-
+from pathlib import Path
 import asyncio
-from fastapi.responses import JSONResponse
-
-from fastapi import FastAPI
-from middleware import ZwischenMiddleware
-from database import init_zwischen_db
+from fastapi.responses import JSONResponse, HTMLResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi import FastAPI, Request
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
+
+from middleware import ZwischenMiddleware
+from database import init_zwischen_db
 
 from crud import (
     number_of_requests,
@@ -27,6 +29,8 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(lifespan=lifespan)
+
+app.mount("/assets", StaticFiles(directory=Path("metrics/dist/assets")), name="assets")
 
 app.add_middleware(ZwischenMiddleware)
 
@@ -51,7 +55,10 @@ async def greet():
     }
 
 @app.get("/metrics")
-async def get_metrics():
+async def get_metrics(request: Request):
+    if "text/html" in request.headers.get("accept", ""):
+        return FileResponse(Path("metrics/dist/index.html"))
+    
     metrics = {
         "total_requests": await number_of_requests(),
         "requests_by_country": await requests_by_country(),
