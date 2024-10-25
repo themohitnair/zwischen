@@ -51,15 +51,15 @@ async def insert_log(ip: str, method: str, endpoint: str, status_code: str, time
 async def number_of_requests(mode: Literal["month", "day", "hour", "week", "year", "alltime"], db: duckdb.DuckDBPyConnection) -> Dict[str, int]:
     try:
         if mode == "month":
-            query = "SELECT COUNT(*) FROM Log WHERE timestamp >= date_trunc('month', current_timestamp)"
+            query = "SELECT COUNT(*) FROM log WHERE timestamp >= date_trunc('month', current_timestamp)"
         elif mode == "day":
-            query = "SELECT COUNT(*) FROM Log WHERE timestamp >= date_trunc('day', current_timestamp)"
+            query = "SELECT COUNT(*) FROM log WHERE timestamp >= date_trunc('day', current_timestamp)"
         elif mode == "hour":
-            query = "SELECT COUNT(*) FROM Log WHERE timestamp >= date_trunc('hour', current_timestamp)"
+            query = "SELECT COUNT(*) FROM log WHERE timestamp >= date_trunc('hour', current_timestamp)"
         elif mode == "week":
-            query = "SELECT COUNT(*) FROM Log WHERE timestamp >= date_trunc('week', current_timestamp)"
+            query = "SELECT COUNT(*) FROM log WHERE timestamp >= date_trunc('week', current_timestamp)"
         elif mode == "year":
-            query = "SELECT COUNT(*) FROM Log WHERE timestamp >= date_trunc('year', current_timestamp)"
+            query = "SELECT COUNT(*) FROM log WHERE timestamp >= date_trunc('year', current_timestamp)"
         elif mode == "alltime":
             query = "SELECT COUNT(*) FROM Log"
         else:
@@ -84,7 +84,7 @@ async def requests_by_ip(n: int, mode: Literal["month", "day", "hour", "week", "
         if mode == "month":
             query = """
                 SELECT ip, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('month', current_timestamp) 
                 GROUP BY ip 
                 ORDER BY request_count DESC 
@@ -93,7 +93,7 @@ async def requests_by_ip(n: int, mode: Literal["month", "day", "hour", "week", "
         elif mode == "day":
             query = """
                 SELECT ip, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('day', current_timestamp) 
                 GROUP BY ip 
                 ORDER BY request_count DESC 
@@ -102,7 +102,7 @@ async def requests_by_ip(n: int, mode: Literal["month", "day", "hour", "week", "
         elif mode == "hour":
             query = """
                 SELECT ip, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('hour', current_timestamp) 
                 GROUP BY ip 
                 ORDER BY request_count DESC 
@@ -111,7 +111,7 @@ async def requests_by_ip(n: int, mode: Literal["month", "day", "hour", "week", "
         elif mode == "week":
             query = """
                 SELECT ip, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('week', current_timestamp) 
                 GROUP BY ip 
                 ORDER BY request_count DESC 
@@ -120,7 +120,7 @@ async def requests_by_ip(n: int, mode: Literal["month", "day", "hour", "week", "
         elif mode == "year":
             query = """
                 SELECT ip, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('year', current_timestamp) 
                 GROUP BY ip 
                 ORDER BY request_count DESC 
@@ -129,7 +129,7 @@ async def requests_by_ip(n: int, mode: Literal["month", "day", "hour", "week", "
         elif mode == "alltime":
             query = """
                 SELECT ip, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 GROUP BY ip 
                 ORDER BY request_count DESC 
                 LIMIT ?
@@ -154,7 +154,7 @@ async def requests_by_method(n: int, mode: Literal["month", "day", "hour", "week
         if mode == "month":
             query = """
                 SELECT method, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('month', current_timestamp) 
                 GROUP BY method 
                 ORDER BY request_count DESC 
@@ -163,7 +163,7 @@ async def requests_by_method(n: int, mode: Literal["month", "day", "hour", "week
         elif mode == "day":
             query = """
                 SELECT method, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('day', current_timestamp) 
                 GROUP BY method 
                 ORDER BY request_count DESC 
@@ -172,7 +172,7 @@ async def requests_by_method(n: int, mode: Literal["month", "day", "hour", "week
         elif mode == "hour":
             query = """
                 SELECT method, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('hour', current_timestamp) 
                 GROUP BY method 
                 ORDER BY request_count DESC 
@@ -181,7 +181,7 @@ async def requests_by_method(n: int, mode: Literal["month", "day", "hour", "week
         elif mode == "week":
             query = """
                 SELECT method, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('week', current_timestamp) 
                 GROUP BY method 
                 ORDER BY request_count DESC 
@@ -190,7 +190,7 @@ async def requests_by_method(n: int, mode: Literal["month", "day", "hour", "week
         elif mode == "year":
             query = """
                 SELECT method, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('year', current_timestamp) 
                 GROUP BY method 
                 ORDER BY request_count DESC 
@@ -199,7 +199,7 @@ async def requests_by_method(n: int, mode: Literal["month", "day", "hour", "week
         elif mode == "alltime":
             query = """
                 SELECT method, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 GROUP BY method 
                 ORDER BY request_count DESC 
                 LIMIT ?
@@ -225,7 +225,7 @@ async def requests_by_city(n: int, mode: Literal["month", "day", "hour", "week",
         if mode == "month":
             query = """
                 SELECT city, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('month', current_timestamp) 
                 GROUP BY city 
                 ORDER BY request_count DESC 
@@ -234,7 +234,7 @@ async def requests_by_city(n: int, mode: Literal["month", "day", "hour", "week",
         elif mode == "day":
             query = """
                 SELECT city, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('day', current_timestamp) 
                 GROUP BY city 
                 ORDER BY request_count DESC 
@@ -243,7 +243,7 @@ async def requests_by_city(n: int, mode: Literal["month", "day", "hour", "week",
         elif mode == "hour":
             query = """
                 SELECT city, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('hour', current_timestamp) 
                 GROUP BY city 
                 ORDER BY request_count DESC 
@@ -252,7 +252,7 @@ async def requests_by_city(n: int, mode: Literal["month", "day", "hour", "week",
         elif mode == "week":
             query = """
                 SELECT city, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('week', current_timestamp) 
                 GROUP BY city 
                 ORDER BY request_count DESC 
@@ -261,7 +261,7 @@ async def requests_by_city(n: int, mode: Literal["month", "day", "hour", "week",
         elif mode == "year":
             query = """
                 SELECT city, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('year', current_timestamp) 
                 GROUP BY city 
                 ORDER BY request_count DESC 
@@ -270,7 +270,7 @@ async def requests_by_city(n: int, mode: Literal["month", "day", "hour", "week",
         elif mode == "alltime":
             query = """
                 SELECT city, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 GROUP BY city 
                 ORDER BY request_count DESC 
                 LIMIT ?
@@ -296,7 +296,7 @@ async def requests_by_country(n: int, mode: Literal["month", "day", "hour", "wee
         if mode == "month":
             query = """
                 SELECT country, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('month', current_timestamp) 
                 GROUP BY country 
                 ORDER BY request_count DESC 
@@ -305,7 +305,7 @@ async def requests_by_country(n: int, mode: Literal["month", "day", "hour", "wee
         elif mode == "day":
             query = """
                 SELECT country, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('day', current_timestamp) 
                 GROUP BY country 
                 ORDER BY request_count DESC 
@@ -314,7 +314,7 @@ async def requests_by_country(n: int, mode: Literal["month", "day", "hour", "wee
         elif mode == "hour":
             query = """
                 SELECT country, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('hour', current_timestamp) 
                 GROUP BY country 
                 ORDER BY request_count DESC 
@@ -323,7 +323,7 @@ async def requests_by_country(n: int, mode: Literal["month", "day", "hour", "wee
         elif mode == "week":
             query = """
                 SELECT country, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('week', current_timestamp) 
                 GROUP BY country 
                 ORDER BY request_count DESC 
@@ -332,7 +332,7 @@ async def requests_by_country(n: int, mode: Literal["month", "day", "hour", "wee
         elif mode == "year":
             query = """
                 SELECT country, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('year', current_timestamp) 
                 GROUP BY country 
                 ORDER BY request_count DESC 
@@ -341,7 +341,7 @@ async def requests_by_country(n: int, mode: Literal["month", "day", "hour", "wee
         elif mode == "alltime":
             query = """
                 SELECT country, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 GROUP BY country 
                 ORDER BY request_count DESC 
                 LIMIT ?
@@ -367,7 +367,7 @@ async def requests_by_coordinates(n: int, mode: Literal["month", "day", "hour", 
         if mode == "month":
             query = """
                 SELECT latitude, longitude, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('month', current_timestamp) 
                 GROUP BY latitude, longitude 
                 ORDER BY request_count DESC 
@@ -376,7 +376,7 @@ async def requests_by_coordinates(n: int, mode: Literal["month", "day", "hour", 
         elif mode == "day":
             query = """
                 SELECT latitude, longitude, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('day', current_timestamp) 
                 GROUP BY latitude, longitude 
                 ORDER BY request_count DESC 
@@ -385,7 +385,7 @@ async def requests_by_coordinates(n: int, mode: Literal["month", "day", "hour", 
         elif mode == "hour":
             query = """
                 SELECT latitude, longitude, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('hour', current_timestamp) 
                 GROUP BY latitude, longitude 
                 ORDER BY request_count DESC 
@@ -394,7 +394,7 @@ async def requests_by_coordinates(n: int, mode: Literal["month", "day", "hour", 
         elif mode == "week":
             query = """
                 SELECT latitude, longitude, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('week', current_timestamp) 
                 GROUP BY latitude, longitude 
                 ORDER BY request_count DESC 
@@ -403,7 +403,7 @@ async def requests_by_coordinates(n: int, mode: Literal["month", "day", "hour", 
         elif mode == "year":
             query = """
                 SELECT latitude, longitude, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('year', current_timestamp) 
                 GROUP BY latitude, longitude 
                 ORDER BY request_count DESC 
@@ -412,7 +412,7 @@ async def requests_by_coordinates(n: int, mode: Literal["month", "day", "hour", 
         elif mode == "alltime":
             query = """
                 SELECT latitude, longitude, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 GROUP BY latitude, longitude 
                 ORDER BY request_count DESC 
                 LIMIT ?
@@ -438,7 +438,7 @@ async def requests_by_status_code(n: int, mode: Literal["month", "day", "hour", 
         if mode == "month":
             query = """
                 SELECT status_code, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('month', current_timestamp) 
                 GROUP BY status_code 
                 ORDER BY request_count DESC 
@@ -447,7 +447,7 @@ async def requests_by_status_code(n: int, mode: Literal["month", "day", "hour", 
         elif mode == "day":
             query = """
                 SELECT status_code, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('day', current_timestamp) 
                 GROUP BY status_code 
                 ORDER BY request_count DESC 
@@ -456,7 +456,7 @@ async def requests_by_status_code(n: int, mode: Literal["month", "day", "hour", 
         elif mode == "hour":
             query = """
                 SELECT status_code, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('hour', current_timestamp) 
                 GROUP BY status_code 
                 ORDER BY request_count DESC 
@@ -465,7 +465,7 @@ async def requests_by_status_code(n: int, mode: Literal["month", "day", "hour", 
         elif mode == "week":
             query = """
                 SELECT status_code, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('week', current_timestamp) 
                 GROUP BY status_code 
                 ORDER BY request_count DESC 
@@ -474,7 +474,7 @@ async def requests_by_status_code(n: int, mode: Literal["month", "day", "hour", 
         elif mode == "year":
             query = """
                 SELECT status_code, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('year', current_timestamp) 
                 GROUP BY status_code 
                 ORDER BY request_count DESC 
@@ -483,7 +483,7 @@ async def requests_by_status_code(n: int, mode: Literal["month", "day", "hour", 
         elif mode == "alltime":
             query = """
                 SELECT status_code, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 GROUP BY status_code 
                 ORDER BY request_count DESC 
                 LIMIT ?
@@ -509,7 +509,7 @@ async def requests_by_os(n: int, mode: Literal["month", "day", "hour", "week", "
         if mode == "month":
             query = """
                 SELECT os, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('month', current_timestamp) 
                 GROUP BY os 
                 ORDER BY request_count DESC 
@@ -518,7 +518,7 @@ async def requests_by_os(n: int, mode: Literal["month", "day", "hour", "week", "
         elif mode == "day":
             query = """
                 SELECT os, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('day', current_timestamp) 
                 GROUP BY os 
                 ORDER BY request_count DESC 
@@ -527,7 +527,7 @@ async def requests_by_os(n: int, mode: Literal["month", "day", "hour", "week", "
         elif mode == "hour":
             query = """
                 SELECT os, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('hour', current_timestamp) 
                 GROUP BY os 
                 ORDER BY request_count DESC 
@@ -536,7 +536,7 @@ async def requests_by_os(n: int, mode: Literal["month", "day", "hour", "week", "
         elif mode == "week":
             query = """
                 SELECT os, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('week', current_timestamp) 
                 GROUP BY os 
                 ORDER BY request_count DESC 
@@ -545,7 +545,7 @@ async def requests_by_os(n: int, mode: Literal["month", "day", "hour", "week", "
         elif mode == "year":
             query = """
                 SELECT os, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('year', current_timestamp) 
                 GROUP BY os 
                 ORDER BY request_count DESC 
@@ -554,7 +554,7 @@ async def requests_by_os(n: int, mode: Literal["month", "day", "hour", "week", "
         elif mode == "alltime":
             query = """
                 SELECT os, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 GROUP BY os 
                 ORDER BY request_count DESC 
                 LIMIT ?
@@ -580,7 +580,7 @@ async def requests_by_browser(n: int, mode: Literal["month", "day", "hour", "wee
         if mode == "month":
             query = """
                 SELECT browser, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('month', current_timestamp) 
                 GROUP BY browser 
                 ORDER BY request_count DESC 
@@ -589,7 +589,7 @@ async def requests_by_browser(n: int, mode: Literal["month", "day", "hour", "wee
         elif mode == "day":
             query = """
                 SELECT browser, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('day', current_timestamp) 
                 GROUP BY browser 
                 ORDER BY request_count DESC 
@@ -598,7 +598,7 @@ async def requests_by_browser(n: int, mode: Literal["month", "day", "hour", "wee
         elif mode == "hour":
             query = """
                 SELECT browser, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('hour', current_timestamp) 
                 GROUP BY browser 
                 ORDER BY request_count DESC 
@@ -607,7 +607,7 @@ async def requests_by_browser(n: int, mode: Literal["month", "day", "hour", "wee
         elif mode == "week":
             query = """
                 SELECT browser, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('week', current_timestamp) 
                 GROUP BY browser 
                 ORDER BY request_count DESC 
@@ -616,7 +616,7 @@ async def requests_by_browser(n: int, mode: Literal["month", "day", "hour", "wee
         elif mode == "year":
             query = """
                 SELECT browser, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('year', current_timestamp) 
                 GROUP BY browser 
                 ORDER BY request_count DESC 
@@ -625,7 +625,7 @@ async def requests_by_browser(n: int, mode: Literal["month", "day", "hour", "wee
         elif mode == "alltime":
             query = """
                 SELECT browser, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 GROUP BY browser 
                 ORDER BY request_count DESC 
                 LIMIT ?
@@ -651,7 +651,7 @@ async def requests_by_device(n: int, mode: Literal["month", "day", "hour", "week
         if mode == "month":
             query = """
                 SELECT device, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('month', current_timestamp) 
                 GROUP BY device 
                 ORDER BY request_count DESC 
@@ -660,7 +660,7 @@ async def requests_by_device(n: int, mode: Literal["month", "day", "hour", "week
         elif mode == "day":
             query = """
                 SELECT device, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('day', current_timestamp) 
                 GROUP BY device 
                 ORDER BY request_count DESC 
@@ -669,7 +669,7 @@ async def requests_by_device(n: int, mode: Literal["month", "day", "hour", "week
         elif mode == "hour":
             query = """
                 SELECT device, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('hour', current_timestamp) 
                 GROUP BY device 
                 ORDER BY request_count DESC 
@@ -678,7 +678,7 @@ async def requests_by_device(n: int, mode: Literal["month", "day", "hour", "week
         elif mode == "week":
             query = """
                 SELECT device, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('week', current_timestamp) 
                 GROUP BY device 
                 ORDER BY request_count DESC 
@@ -687,7 +687,7 @@ async def requests_by_device(n: int, mode: Literal["month", "day", "hour", "week
         elif mode == "year":
             query = """
                 SELECT device, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('year', current_timestamp) 
                 GROUP BY device 
                 ORDER BY request_count DESC 
@@ -696,7 +696,7 @@ async def requests_by_device(n: int, mode: Literal["month", "day", "hour", "week
         elif mode == "alltime":
             query = """
                 SELECT device, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 GROUP BY device 
                 ORDER BY request_count DESC 
                 LIMIT ?
@@ -722,7 +722,7 @@ async def requests_by_referrer(n: int, mode: Literal["month", "day", "hour", "we
         if mode == "month":
             query = """
                 SELECT referrer, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('month', current_timestamp) 
                 GROUP BY referrer 
                 ORDER BY request_count DESC 
@@ -731,7 +731,7 @@ async def requests_by_referrer(n: int, mode: Literal["month", "day", "hour", "we
         elif mode == "day":
             query = """
                 SELECT referrer, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('day', current_timestamp) 
                 GROUP BY referrer 
                 ORDER BY request_count DESC 
@@ -740,7 +740,7 @@ async def requests_by_referrer(n: int, mode: Literal["month", "day", "hour", "we
         elif mode == "hour":
             query = """
                 SELECT referrer, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('hour', current_timestamp) 
                 GROUP BY referrer 
                 ORDER BY request_count DESC 
@@ -749,7 +749,7 @@ async def requests_by_referrer(n: int, mode: Literal["month", "day", "hour", "we
         elif mode == "week":
             query = """
                 SELECT referrer, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('week', current_timestamp) 
                 GROUP BY referrer 
                 ORDER BY request_count DESC 
@@ -758,7 +758,7 @@ async def requests_by_referrer(n: int, mode: Literal["month", "day", "hour", "we
         elif mode == "year":
             query = """
                 SELECT referrer, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('year', current_timestamp) 
                 GROUP BY referrer 
                 ORDER BY request_count DESC 
@@ -767,7 +767,7 @@ async def requests_by_referrer(n: int, mode: Literal["month", "day", "hour", "we
         elif mode == "alltime":
             query = """
                 SELECT referrer, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 GROUP BY referrer 
                 ORDER BY request_count DESC 
                 LIMIT ?
@@ -793,7 +793,7 @@ async def requests_by_endpoint(n: int, mode: Literal["month", "day", "hour", "we
         if mode == "month":
             query = """
                 SELECT endpoint, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('month', current_timestamp) 
                 GROUP BY endpoint 
                 ORDER BY request_count DESC 
@@ -802,7 +802,7 @@ async def requests_by_endpoint(n: int, mode: Literal["month", "day", "hour", "we
         elif mode == "day":
             query = """
                 SELECT endpoint, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('day', current_timestamp) 
                 GROUP BY endpoint 
                 ORDER BY request_count DESC 
@@ -811,7 +811,7 @@ async def requests_by_endpoint(n: int, mode: Literal["month", "day", "hour", "we
         elif mode == "hour":
             query = """
                 SELECT endpoint, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('hour', current_timestamp) 
                 GROUP BY endpoint 
                 ORDER BY request_count DESC 
@@ -820,7 +820,7 @@ async def requests_by_endpoint(n: int, mode: Literal["month", "day", "hour", "we
         elif mode == "week":
             query = """
                 SELECT endpoint, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('week', current_timestamp) 
                 GROUP BY endpoint 
                 ORDER BY request_count DESC 
@@ -829,7 +829,7 @@ async def requests_by_endpoint(n: int, mode: Literal["month", "day", "hour", "we
         elif mode == "year":
             query = """
                 SELECT endpoint, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 WHERE timestamp >= date_trunc('year', current_timestamp) 
                 GROUP BY endpoint 
                 ORDER BY request_count DESC 
@@ -838,7 +838,7 @@ async def requests_by_endpoint(n: int, mode: Literal["month", "day", "hour", "we
         elif mode == "alltime":
             query = """
                 SELECT endpoint, COUNT(*) as request_count 
-                FROM Log 
+                FROM log 
                 GROUP BY endpoint 
                 ORDER BY request_count DESC 
                 LIMIT ?

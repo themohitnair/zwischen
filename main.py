@@ -30,6 +30,10 @@ async def greet():
 async def get_metrics():    
     ...
 
+@app.get("/dashboard")
+async def supply_dashboard():
+    ...
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(port=8000, host="localhost", app="main:app", reload=True)
